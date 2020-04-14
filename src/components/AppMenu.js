@@ -86,7 +86,7 @@ function AppMenu() {
             </MenuItem>
           
         </Menu>
-        <Typography variant="h6" className={classes.title}>
+        <Typography variant="h6" className={classes.title} align="center">
           Shopping List Generator
         </Typography>
         {/* <Button color="inherit">Login</Button> */}

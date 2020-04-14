@@ -12,7 +12,7 @@ import ManageRecipes from "./components/ManageRecipes";
 function App() {
   return (
     <div className="App">
-      <Container maxWidth="sm" style={{ border: "1px solid pink" }}>
+      <Container align="left" maxWidth="sm">
         <AppMenu />
         <Switch>
           <Route path="/shopping-list">
