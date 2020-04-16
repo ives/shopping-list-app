@@ -8,6 +8,7 @@ import ShoppingList from "./components/ShoppingList";
 import BuildList from "./components/BuildList";
 import ManageIngredients from "./components/ManageIngredients";
 import ManageRecipes from "./components/ManageRecipes";
+import EditRecipe from "./components/EditRecipe";
 
 function App() {
   return (
@@ -26,6 +27,9 @@ function App() {
           </Route>
           <Route path="/manage-recipes">
             <ManageRecipes />
+          </Route>
+          <Route path="/edit-recipe/:id?">
+            <EditRecipe />
           </Route>
           <Route path="/">
             <div>MAIN / Default </div>
