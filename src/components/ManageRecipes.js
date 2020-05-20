@@ -6,7 +6,6 @@ import ListItem from "@material-ui/core/ListItem";
 import Box from "@material-ui/core/Box";
 
 function ManageRecipes() {
-
   return (
     <div>
       <h4>Manage recipies</h4>
@@ -24,17 +23,15 @@ function ManageRecipes() {
           </Button>
         </Box>
 
-        <p>Tap to view / edit:</p>
-
-        <List component="nav" aria-label="main mailbox folders">
-          <ListItem button divider>
-          <Box width="100%">One</Box>
+        <List component="nav" aria-label="main mailbox folders" disablePadding dense>
+          <ListItem button to="edit-recipe/123" component={ReactRouterLink}>
+            <Box width="100%">One</Box>
             <Button color="primary" variant="contained" size="small">
               X
             </Button>
           </ListItem>
-          <ListItem button divider>
-          <Box width="100%">Two</Box>
+          <ListItem button to="edit-recipe/543t" component={ReactRouterLink}>
+            <Box width="100%">Two</Box>
             <Button color="primary" variant="contained" size="small">
               X
             </Button>

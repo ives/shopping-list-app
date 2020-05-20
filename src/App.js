@@ -1,6 +1,7 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import Container from "@material-ui/core/Container";
+import { withStyles } from "@material-ui/core/styles";
 
 import "./App.css";
 import AppMenu from "./components/AppMenu";
@@ -11,9 +12,26 @@ import ManageRecipes from "./components/ManageRecipes";
 import EditRecipe from "./components/EditRecipe";
 
 function App() {
+  // my CSS Overrides
+  const GlobalCss = withStyles({
+    "@global": {
+      ".MuiListItem-button": {
+        borderRadius: 5,
+        // padding: 0,
+      },
+      ".supermarket": {
+        background: 'pink',
+        fontSize: 10,
+        padding: '2px 4px',
+        verticalAlign: 'super'
+      }
+    },
+  })(() => null);
+
   return (
     <div className="App">
       <Container align="left" maxWidth="sm">
+        <GlobalCss />
         <AppMenu />
         <Switch>
           <Route path="/shopping-list">
@@ -32,7 +50,7 @@ function App() {
             <EditRecipe />
           </Route>
           <Route path="/">
-            <div>MAIN / Default </div>
+            <Redirect to="/shopping-list" />
           </Route>
         </Switch>
       </Container>
