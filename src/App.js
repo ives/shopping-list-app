@@ -3,7 +3,6 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import { withStyles } from "@material-ui/core/styles";
 
-import "./App.css";
 import AppMenu from "./components/AppMenu";
 import ShoppingList from "./components/ShoppingList";
 import BuildList from "./components/BuildList";
@@ -18,12 +17,6 @@ function App() {
       ".MuiListItem-button": {
         borderRadius: 5,
         // padding: 0,
-      },
-      ".supermarket": {
-        background: 'pink',
-        fontSize: 10,
-        padding: '2px 4px',
-        verticalAlign: 'super'
       }
     },
   })(() => null);
@@ -40,7 +33,7 @@ function App() {
           <Route path="/build-list">
             <BuildList />
           </Route>
-          <Route path="/manage-ingredients">
+          <Route path="/manage-ingredients/:id?">
             <ManageIngredients />
           </Route>
           <Route path="/manage-recipes">

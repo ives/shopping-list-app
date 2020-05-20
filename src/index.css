@@ -11,3 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.supermarket {
+  background: #77d2f27d;
+  font-size: 10px;
+  padding: 2px 4px;
+  text-transform: uppercase;
+  vertical-align: super;
+}

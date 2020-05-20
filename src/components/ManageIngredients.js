@@ -1,173 +1,126 @@
 import React from "react";
 import axios from 'axios';
 
-import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import TextField from "@material-ui/core/TextField";
+import { useParams, Link as ReactRouterLink, withRouter } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import FormMessage from "./FormMessage";
+import FormMessage from "./_FormMessage";
+import IngredientForm from "./_IngredientForm";
 import Box from "@material-ui/core/Box";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import { Divider } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    width: "45%",
-  },
-}));
+function ManageIngredients({history}) {
 
-function ManageIngredients() {
-
+  const { id } = useParams();
   const [allItems, setAllItems] = React.useState([]);
-  const [addedItem, setAddedItem] = React.useState("");
-  const [invalidAddInput, setInvalidAddInput] = React.useState(false);
   const [alertType, setAlertType] = React.useState("");
 
-  const fetchIngredients = async () => {
-    console.log('fetchIngredients async ::');
+  // FETCH ALL
 
+  const fetchIngredients = async () => {
+    console.log('Fetching ALL');
     try {
-      // fetch data from a url endpoint
       const data = await axios.get(`${process.env.REACT_APP_API_BASE_URI_DEV}/api/ingredients`);
-      setAllItems(data.data);
-      console.log('data', data.data);
-      console.log('allItems', allItems);
-      return data;
+      let ingredients = data.data;
+      ingredients.sort(function(a, b) {
+        var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+        var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+      
+        // names must be equal
+        return 0;
+      });
+      setAllItems(ingredients);
     } catch(error) {
-      console.log("fetchIngredients failed", error);
-      // appropriately handle the error
+      console.debug("fetchIngredients failed", error);
+      setAlertType("error");
     }
   }
 
-
-  React.useEffect(() => {
-    fetchIngredients();
-  }, []); // [] - only call once when MOUNTED
-
-  const classes = useStyles();
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    addItem();
+  // EDIT
+  const editItem = (id) => {
+    history.push(`/manage-ingredients/${id}`);
   };
 
-  // ADD
+  // DELETE
+  const removeItem = async (event, id) => {
 
-  const addItem = () => {
-    console.log("Adding", addedItem);
+    const goAhead = window.confirm('Delete?');
+    if (!goAhead) return false;
 
-    // validate
-    setInvalidAddInput(false);
-    if (addedItem.length < 3) {
-      setInvalidAddInput(true);
-    } else {
-      // ToDo add AXIOS call
+    event.stopPropagation();
+    
+    try {
+      await axios.delete(`${process.env.REACT_APP_API_BASE_URI_DEV}/api/ingredients/${id}`);
+      fetchIngredients();
       setAlertType("success");
-
-      // on success only: reset input
-      setAddedItem("");
-
-      // handle error
+    } catch(error) {
+      console.debug("removeItem failed", error);
+      setAlertType("error");
     }
   };
 
-  // EDIT
-  const editItem = (id) => {
-    // ToDo add AXIOS call
-    console.log("Edit", id);
-  };
-
-  // REMOVE
-  const removeItem = (event, id) => {
-    // ToDo confirm first
-    // ToDo add AXIOS call
-    event.stopPropagation();
-    setAlertType("error");
-    console.log("Remove", id);
-  };
+  React.useEffect(() => {
+    if(!id) {
+      fetchIngredients();
+    }
+  }, [id]); // [] - only call once when MOUNTED
 
   return (
     <div>
-      <h4>Manage ingredients for recipies</h4>
-
-      <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-        <Box mb={3}>
-          <FormControl className={classes.formControl}>
-            <TextField
-              id="add-input"
-              required
-              label="Ingredient Name:"
-              error={invalidAddInput}
-              helperText={invalidAddInput ? "Minimum 3 characters" : ""}
-              size="small"
-              fullWidth
-              value={addedItem}
-              onChange={(event) => {
-                setAddedItem(event.target.value);
-                setInvalidAddInput(false);
-              }}
-            />
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="add-spm">Supermarket:</InputLabel>
-            <Select
-              size="small"
-              fullWidth
-              id=""
-              name=""
-              value="M&S"
-              onChange={null}
-              labelId="add-spm"
-            >
-              <MenuItem value="">ANY (default)</MenuItem>
-              <MenuItem value="M&S">M&S</MenuItem>
-              <MenuItem value="WAITROSE" selected>
-                WAITROSE
-              </MenuItem>
-              <MenuItem value="SAINSBURYS">SAINSBURYS</MenuItem>
-            </Select>
-            <FormHelperText>Defaults to ANY</FormHelperText>
-          </FormControl>
-        </Box>
-        <Button
-          onClick={addItem}
-          variant="contained"
-          size="small"
+        <h4>
+        <ReactRouterLink
+          to="/manage-ingredients"
           color="primary"
         >
-          ADD
-        </Button>
+          INGREDIENTS
+        </ReactRouterLink>{" "}
+        > {id ? `Editing ${id}` : "Add New"}
+      </h4>
 
-        <Divider />
+      <IngredientForm 
+        setAlertType={setAlertType} 
+        fetchIngredients={fetchIngredients}
+        id={id}
+       />
+      
+      {!id && (
+        <React.Fragment>
+          <Box mt={3}>
+          <Divider />
 
-        <List component="nav" aria-label="main mailbox folders">
-          {allItems && allItems.map(item => (
-            <ListItem button onClick={() => editItem(item._id)}>
-              <Box width="100%">
-              {item.name} <span className="supermarket">{item.supermarket}</span>
-              </Box>
-              <Button
-                color="primary"
-                variant="contained"
-                size="small"
-                onClick={(event) => removeItem(event, item._id)}
-              >
-                X
-              </Button>
-          </ListItem>
-          ))}
-        </List>
-      </form>
+        
+          <List component="nav" aria-label="main mailbox folders">
+            {allItems && allItems.map(item => (
+              <ListItem button onClick={() => editItem(item._id)} key={item._id}>
+                <Box width="100%">
+                  {item.name} &nbsp;
+                  {item.supermarket && (<span className="supermarket">{item.supermarket}</span>)}
+                </Box>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  size="small"
+                  onClick={(event) => removeItem(event, item._id)}
+                >
+                  X
+                </Button>
+            </ListItem>
+            ))}
+          </List>
+          </Box>
+        </React.Fragment>
+      )}
 
       <FormMessage alertType={alertType} callbackParent={setAlertType} />
     </div>
   );
 }
 
-export default ManageIngredients;
+export default withRouter(ManageIngredients);
