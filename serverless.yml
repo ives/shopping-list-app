@@ -1,0 +1,15 @@
+service: shopping-list-app
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-west-2
+
+plugins:
+  - serverless-finch
+
+# For Static HTML site - used by Finch plugin
+custom:
+  client:
+    bucketName: shopping-list-app-ives-2020
+    distributionFolder: front-end/build
