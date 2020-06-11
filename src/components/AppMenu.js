@@ -1,6 +1,8 @@
 import React from "react";
+import { Link as ReactRouterLink } from "react-router-dom";
+
 import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -8,7 +10,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import MenuIcon from "@material-ui/icons/Menu";
-import AppBar from "@material-ui/core/AppBar";
 
 // Icons
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
@@ -58,35 +59,37 @@ function AppMenu() {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <ShoppingCartIcon fontSize="small" />
-            </ListItemIcon>
-            Shopping List
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <AddShoppingCartIcon fontSize="small" />
-            </ListItemIcon>
-            Build List
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <ListIcon fontSize="small" />
-            </ListItemIcon>
-            Manage Ingredients
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <SpeakerNotesIcon fontSize="small" />
-            </ListItemIcon>
-            Manage Recipes
-          </MenuItem>
+          
+            <MenuItem onClick={handleClose} component={ReactRouterLink} to="/shopping-list">
+              <ListItemIcon>
+                <ShoppingCartIcon fontSize="small" />
+              </ListItemIcon>
+              Shopping List
+            </MenuItem>
+            <MenuItem onClick={handleClose} component={ReactRouterLink} to="/build-list">
+              <ListItemIcon>
+                <AddShoppingCartIcon fontSize="small" />
+              </ListItemIcon>
+              Build List
+            </MenuItem>
+            <MenuItem onClick={handleClose} component={ReactRouterLink} to="/manage-ingredients">
+              <ListItemIcon>
+                <ListIcon fontSize="small" />
+              </ListItemIcon>
+              Manage Ingredients
+            </MenuItem>
+            <MenuItem onClick={handleClose} component={ReactRouterLink} to="/manage-recipes">
+              <ListItemIcon>
+                <SpeakerNotesIcon fontSize="small" />
+              </ListItemIcon>
+              Manage Recipes
+            </MenuItem>
+          
         </Menu>
-        <Typography variant="h6" className={classes.title}>
+        <Typography variant="h6" className={classes.title} align="center">
           Shopping List Generator
         </Typography>
-        <Button color="inherit">Login</Button>
+        {/* <Button color="inherit">Login</Button> */}
       </Toolbar>
     </AppBar>
   );
