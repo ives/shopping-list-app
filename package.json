@@ -5,5 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "serverless-finch": "^2.5.2",
+    "uuid": "^8.1.0"
   }
 }

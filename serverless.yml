@@ -4,6 +4,82 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: eu-west-2
+  environment:
+    DYNAMODB_TABLE_INGREDIENTS: ${self:service}-ingredients-${opt:stage, self:provider.stage} # Adds -dev
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE_INGREDIENTS}"
+
+package:
+  exclude:
+    - front-end/**
+
+functions:
+  create:
+    handler: sls-lambdas/ingredients.create
+    events:
+      - http:
+          path: api/ingredients
+          method: post
+          cors: true
+
+  list:
+    handler: sls-lambdas/ingredients.list
+    events:
+      - http:
+          path: api/ingredients
+          method: get
+          cors: true
+
+  # get:
+  #   handler: sls-lambdas/ingredients.get
+  #   events:
+  #     - http:
+  #         path: ingredients/{id}
+  #         method: get
+  #         cors: true
+
+  # update:
+  #   handler: sls-lambdas/ingredients.update
+  #   events:
+  #     - http:
+  #         path: ingredients/{id}
+  #         method: put
+  #         cors: true
+
+  # delete:
+  #   handler: sls-lambdas/ingredients.delete
+  #   events:
+  #     - http:
+  #         path: ingredients/{id}
+  #         method: delete
+  #         cors: true
+
+resources:
+  Resources:
+    Ingredients:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain # Keeps around the DynamoDB resource when we redeploy/destroy
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE_INGREDIENTS}
 
 plugins:
   - serverless-finch
@@ -13,3 +89,4 @@ custom:
   client:
     bucketName: shopping-list-app-ives-2020
     distributionFolder: front-end/build
+    
