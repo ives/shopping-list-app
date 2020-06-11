@@ -51,6 +51,8 @@ function ManageIngredients({history}) {
   // DELETE
   const removeItem = async (event, id) => {
 
+    event.stopPropagation();
+
     const goAhead = window.confirm('Delete?');
     if (!goAhead) return false;
 
