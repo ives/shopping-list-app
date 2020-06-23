@@ -1,14 +1,8 @@
 import React from "react";
 import axios from 'axios';
 
-import { useParams, Link as ReactRouterLink, withRouter } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import FormMessage from "./_FormMessage";
+import { useParams, Link, withRouter } from "react-router-dom";
 import IngredientForm from "./_IngredientForm";
-import Box from "@material-ui/core/Box";
-import { Divider } from "@material-ui/core";
 
 function ManageIngredients({history}) {
 
@@ -77,12 +71,9 @@ function ManageIngredients({history}) {
   return (
     <div>
         <h4>
-        <ReactRouterLink
-          to="/manage-ingredients"
-          color="primary"
-        >
+        <Link to="/manage-ingredients">
           INGREDIENTS
-        </ReactRouterLink>{" "}
+        </Link>{" "}
         > {id ? `Editing ${id}` : "Add New"}
       </h4>
 
@@ -94,33 +85,25 @@ function ManageIngredients({history}) {
       
       {!id && (
         <React.Fragment>
-          <Box mt={3}>
-          <Divider />
+          <hr />
 
         
-          <List component="nav" aria-label="main mailbox folders">
+          <ul>
             {allItems && allItems.map(item => (
-              <ListItem button onClick={() => editItem(item._id)} key={item._id}>
-                <Box width="100%">
+              <li button onClick={() => editItem(item.id)} key={item.id}>
+                <div width="100%">
                   {item.name} &nbsp;
                   {item.supermarket && (<span className="supermarket">{item.supermarket}</span>)}
-                </Box>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  size="small"
-                  onClick={(event) => removeItem(event, item._id)}
-                >
+                </div>
+                <button onClick={(event) => removeItem(event, item.id)} >
                   X
-                </Button>
-            </ListItem>
+                </button>
+            </li>
             ))}
-          </List>
-          </Box>
+          </ul>
         </React.Fragment>
       )}
 
-      <FormMessage alertType={alertType} callbackParent={setAlertType} />
     </div>
   );
 }
