@@ -1,15 +1,5 @@
 import React from "react";
-import { useParams, Link as ReactRouterLink } from "react-router-dom";
-import InputLabel from "@material-ui/core/InputLabel";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Link from "@material-ui/core/Link";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-
-import Box from "@material-ui/core/Box";
+import { useParams, Link } from "react-router-dom";
 
 function EditRecipe() {
   const { id } = useParams();
@@ -48,56 +38,37 @@ function EditRecipe() {
   return (
     <div>
       <h4>
-        <Link
-          component={ReactRouterLink}
-          to="/manage-recipes"
-          color="primary"
-        >
+        <Link to="/manage-recipes" color="primary">
           RECIPES
         </Link>{" "}
         > {id === "new" ? "Add a New" : "Edit"} Recipe <span> :: ID: {id}</span>{" "}
       </h4>
 
       <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-        <Box mb={3}>
-          <TextField
-            id="title-input"
-            required
-            error={invalidTitleInput}
-            helperText={invalidTitleInput ? "Minimum 3 characters" : ""}
-            size="small"
-            label="Title:"
-            fullWidth
-            value={title}
-            onChange={(event) => {
-              setTitle(event.target.value);
-              setInvalidTitleInput(false);
-            }}
-          />
-        </Box>
+        <label htmlFor="title-input">Title:</label>
+        <input
+          id="title-input"
+          error={invalidTitleInput}
+          helperText={invalidTitleInput ? "Minimum 3 characters" : ""}
+          value={title}
+          onChange={(event) => {
+            setTitle(event.target.value);
+            setInvalidTitleInput(false);
+          }}
+        />
 
-        <FormControl>
-          <InputLabel htmlFor="add-cat">Category:</InputLabel>
-          <Select
-            size="small"
-            fullWidth
-            id=""
-            name=""
-            value=""
-            onChange={null}
-            labelId="add-cat"
-          >
-            <MenuItem value="Breakfast">Breakfast</MenuItem>
-            <MenuItem value="Main">Main</MenuItem>
-            <MenuItem value="Snack" selected>
-              Snack
-            </MenuItem>
-          </Select>
-          <FormHelperText>Comment goes here</FormHelperText>
-        </FormControl>
+        <label htmlFor="add-cat">Category:</label>
+        <select id="add-cat" name="" value="" onChange={null}>
+          <option value="Breakfast">Breakfast</option>
+          <option value="Main">Main</option>
+          <option value="Snack" selected>
+            Snack
+          </option>
+        </select>
+        <p>Comment goes here</p>
 
         <label>Ingredients:</label>
-        <Select
+        <select
           size="small"
           fullWidth
           id={`ingredient-${++ingredientIndex}`}
@@ -110,14 +81,12 @@ function EditRecipe() {
             });
           }}
         >
-          <MenuItem value={10}>Apples</MenuItem>
-          <MenuItem value={20}>Bananas</MenuItem>
-          <MenuItem value={30}>Perry</MenuItem>
-        </Select>
+          <option value={10}>Apples</option>
+          <option value={20}>Bananas</option>
+          <option value={30}>Perry</option>
+        </select>
 
-        <Select
-          size="small"
-          fullWidth
+        <select
           id={`ingredient-${++ingredientIndex}`}
           name={ingredientIndex}
           value={ingredients[ingredientIndex] || ""}
@@ -128,21 +97,14 @@ function EditRecipe() {
             });
           }}
         >
-          <MenuItem value={10}>Apples</MenuItem>
-          <MenuItem value={20}>Bananas</MenuItem>
-          <MenuItem value={30}>Perry</MenuItem>
-        </Select>
+          <option value={10}>Apples</option>
+          <option value={20}>Bananas</option>
+          <option value={30}>Perry</option>
+        </select>
 
         <p>LINK add another</p>
 
-        <Button
-          onClick={saveItem}
-          variant="contained"
-          size="small"
-          color="primary"
-        >
-          SAVE RECIPE
-        </Button>
+        <button onClick={saveItem}>SAVE RECIPE</button>
         <p>CANCEL & RETURN</p>
       </form>
     </div>

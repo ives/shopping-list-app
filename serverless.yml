@@ -42,7 +42,7 @@ functions:
   #   handler: sls-lambdas/ingredients.get
   #   events:
   #     - http:
-  #         path: ingredients/{id}
+  #         path: api/ingredients/{id}
   #         method: get
   #         cors: true
 
@@ -50,7 +50,7 @@ functions:
   #   handler: sls-lambdas/ingredients.update
   #   events:
   #     - http:
-  #         path: ingredients/{id}
+  #         path: api/ingredients/{id}
   #         method: put
   #         cors: true
 
@@ -58,7 +58,7 @@ functions:
   #   handler: sls-lambdas/ingredients.delete
   #   events:
   #     - http:
-  #         path: ingredients/{id}
+  #         path: api/ingredients/{id}
   #         method: delete
   #         cors: true
 

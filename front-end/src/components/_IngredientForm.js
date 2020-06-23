@@ -2,30 +2,11 @@ import React from "react";
 import axios from 'axios';
 import { withRouter } from "react-router-dom";
 
-import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import InputLabel from "@material-ui/core/InputLabel";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
-
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    width: "45%",
-  },
-}));
-
 function IngredientForm({ history, setAlertType, fetchIngredients, id }) {
 
   const [addedName, setAddedName] = React.useState("");
   const [addedSupermarket, setAddedSupermarket] = React.useState("");
   const [invalidAddInput, setInvalidAddInput] = React.useState(false);
-
-  const classes = useStyles();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -104,50 +85,34 @@ function IngredientForm({ history, setAlertType, fetchIngredients, id }) {
   return (
     <form noValidate autoComplete="off" onSubmit={handleSubmit}>
         
-        <Box mb={3}>
-          <FormControl className={classes.formControl}>
-            <TextField
+            <label htmlFor="add-input">Ingredient Name:</label>
+            <input
               id="add-input"
               required
-              label="Ingredient Name:"
               error={invalidAddInput}
               helperText={invalidAddInput ? "Minimum 3 characters" : ""}
-              size="small"
-              fullWidth
               value={addedName}
               onChange={(event) => {
                 setAddedName(event.target.value);
                 setInvalidAddInput(false);
               }}
             />
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="add-spm">Supermarket:</InputLabel>
-            <Select
-              size="small"
-              fullWidth
-              id=""
+            <label htmlFor="add-spm">Supermarket:</label>
+            <select
+              id="add-spm"
               name=""
               value={addedSupermarket}
               onChange={(event) => setAddedSupermarket(event.target.value)}
-              labelId="add-spm"
             >
-              <MenuItem value="">ANY (default)</MenuItem>
-              <MenuItem value="M&S">M&S</MenuItem>
-              <MenuItem value="WAITROSE">WAITROSE</MenuItem>
-              <MenuItem value="SAINSBURYS">SAINSBURYS</MenuItem>
-            </Select>
-            <FormHelperText>Defaults to ANY</FormHelperText>
-          </FormControl>
-        </Box>
-        <Button
-          onClick={changeItem}
-          variant="contained"
-          size="small"
-          color="primary"
-        >
+              <option value="">ANY (default)</option>
+              <option value="M&S">M&S</option>
+              <option value="WAITROSE">WAITROSE</option>
+              <option value="SAINSBURYS">SAINSBURYS</option>
+            </select>
+            <p>Defaults to ANY</p>
+        <button onClick={changeItem} >
           {id ? 'UPDATE' : 'ADD'}
-        </Button>
+        </button>
       </form>
 
   );
